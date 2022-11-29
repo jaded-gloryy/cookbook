@@ -1,7 +1,7 @@
 #will have measurement type mass, volume, or size
-from . import measurement
+from . import Measurement
 
-class ingredient:
+class Ingredient:
     """
     An ingredient object has several attributes:
         Name: The name of the ingredient
