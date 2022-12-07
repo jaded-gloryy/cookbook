@@ -93,25 +93,24 @@ def request_ingredient_data(csv_filepath):
     print("Successfully imported recipe data")
     return standardized_ingredient_names, ingredient_data, measurement_data
 
-    def request_direction_data(csv_filepath):
+def request_direction_data(csv_filepath):
 
-        """
-        Used to create a dictionary from a csv.
+    """
+    Used to create a dictionary from a csv.
 
-        Input: filepath
-        Output: dict
-        """
+    Input: filepath
+    Output: dict
+    """
 
-        print("Importing direction data and buildling dictionary...")
+    print("Importing direction data and buildling dictionary...")
+    direction_dict= {}
+    data = pd.read_csv(csv_filepath)
+    df = pd.DataFrame(data)
 
-        data = pd.read_csv(csv_filepath)
-        df = pd.DataFrame(data)
-        df_removena = df.dropna(thresh=3)
+    for row in range(len(df)):
+        step = df.step.iloc[row]
+        direction = df.directions.iloc[row]
+        direction_dict.update({step:direction})
 
-        steps = list(df_removena.steps)
-        directions = list(df_removena.directions)
-
-        direction_dict = {steps:directions for step,directions in zip(step,directions)}
-
-        print("Sucessfully created Directions dictionary")
-        return direction_dict
+    print("Sucessfully created Directions dictionary")
+    return direction_dict
