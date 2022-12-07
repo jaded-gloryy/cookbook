@@ -1,41 +1,24 @@
-import certifi
-import pandas as pd
-from pymongo import MongoClient
-from classes.DatabaseClient import NoSQLDatabaseClient
 from classes.Measurement import Measurement
 from config import CONFIG
-from recipe_flows import create_recipe
-import ingredient_flows as iflow
+from flows.recipe_flows import create_recipe
+import flows.ingredient_flows as iflow
+from flows.connect_to_db import connect_to_db
 
-# three steps:
-
-#connect to db
-def connect_to_db(database_name):
-    """
-    Function to connect to cookbook db. 
-    """
-    print("Setting up Database Connection...")
-    mongo_client = MongoClient(CONFIG["CONNECTION_STRING"], serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where())
-    print("Successfully connected to Database")
-
-    print("Creating Database Client...")
-    db_client = NoSQLDatabaseClient(mongo_client, database_name )
-    print("Database Client created")
-    
-    return db_client
+recipe_filepath = CONFIG["RECIPE_FILEPATH"]
+directions_filepath = CONFIG["DIRECTIONS_FILEPATH"]
 
 # Comment when testing
 database_name = CONFIG["DATABASE_NAME"]
 ingredient_collection = CONFIG["INGREDIENT_COLLECTION_NAME"]
 recipe_collection = CONFIG["RECIPE_COLLECTION_NAME"]
-recipe_filepath = CONFIG["RECIPE_FILEPATH"]
-directions_filepath = CONFIG["DIRECTIONS_FILEPATH"]
 recipe_name = input("What is the name of this recipe?")
+
 
 # Uncomment when testing
 # database_name = CONFIG["TEST_DATABASE_NAME"]
 # ingredient_collection = CONFIG["TEST_COLLECTION_NAME"]
-# recipe_collecition = CONFIG["TEST_COLLECTION_NAME2"]
+# recipe_collection = CONFIG["TEST_COLLECTION_NAME2"]
+# recipe_name = "pizza"
 
 if __name__ == "__main__":
     
