@@ -11,6 +11,7 @@ CONFIG = {
     "TEST_DATABASE_NAME": environ["TEST_DATABASE_NAME"],
     "TEST_COLLECTION_NAME": environ["TEST_COLLECTION_NAME"],
     "RECIPE_FILEPATH": environ["RECIPE_FILEPATH"],
+    "DIRECTIONS_FILEPATH": environ["DIRECTIONS_FILEPATH"]
     # "": environ[""],
     # "": environ[""]
 }
