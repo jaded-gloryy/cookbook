@@ -37,7 +37,7 @@ recipe_name = "Pizza"
 # Uncomment when testing
 database_name = CONFIG["TEST_DATABASE_NAME"]
 ingredient_collection = CONFIG["TEST_COLLECTION_NAME"]
-recipe_collecition = CONFIG["TEST_COLLECTION_NAME"]
+recipe_collecition = CONFIG["TEST_COLLECTION_NAME2"]
 
 #1. Create recipes
 #a. read in ingredients using request_ingredient_data
@@ -71,6 +71,7 @@ if __name__ == "__main__":
 
     #create Recipe
     new_recipe = create_recipe(recipe_name,ingredients,measurements,directions)
+    db_client.uploadOne_recipe(recipe_collecition,new_recipe)
     
 
 
