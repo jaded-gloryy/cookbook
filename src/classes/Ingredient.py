@@ -15,7 +15,7 @@ class Ingredient:
     """
     def __init__(self, name, matter, food_group):
         self.name = name
-        self.mass_type = matter
+        self.matter = matter
         # self.measurement_type = measurement_type
         self.food_group = food_group
 
@@ -28,7 +28,8 @@ class Ingredient:
     def assign_measurement(self, amount, units):
         self.amount = amount
         self.assign_units(units)
-    
+
+
     # def assign_food_group(self, food_group):
 
     # def assign_type():
