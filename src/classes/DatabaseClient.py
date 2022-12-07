@@ -1,3 +1,5 @@
+from ingredient_flows import standardize_ingredient_name
+from ingredient_flows import create_ingredients
 class BaseClient:
     """
     A base class that can be used to setup receiving and driving with a 3rd party client
@@ -30,29 +32,43 @@ class NoSQLDatabaseClient(BaseClient):
     def list_collection_names(self):
         return self._get_database().list_collection_names()
 
-    def get_ingredient(self, collection_name, ingredient_name):
+    def get_ingredients(self, collection_name, ingredient_names):
         """
-        Get an existing ingredient from db
+        Get existing ingredients from db
         """
+        ingredients = []
         collection = self._get_collection(collection_name)
-        ingredient = collection.find(
+        for name in ingredient_names:
+            ingredient_name = name
+        
+            ingredient = collection.find(
             { "name": ingredient_name}
             )
-        return ingredient
+            ingredients.append(ingredient)
+        return ingredients
     
-    def upload_ingredient(self, collection_name, ingredient):
+    def uploadOne_ingredient(self, collection_name, ingredient):
         """
-        Upload an ingredient object to a db
+        Upload a sinlge ingredient object to a db
         """
         collection = self._get_collection(collection_name)
-        collection.insertOne(ingredient)
+        collection.insert_one(ingredient)
 
-    def upload_recipe(self, collection_name, recipe):
+    def uploadMany_ingredients(self, collection_name, many_ingredients):
+        """
+        Upload many ingredient objects to a db
+        """
+        print("Uploading " + str(len(many_ingredients)) + " ingredient objects...")
+        collection = self._get_collection(collection_name)
+        collection.insert_many(many_ingredients)
+        print("Ingredients successfully uploaded")
+        
+    def uploadOne_recipe(self, collection_name, recipe):
         """
         Upload a recipe object to a db
         """
         collection = self._get_collection(collection_name)
-        collection.insertOne(recipe)
+        collection.insert_one(recipe)
 
     def get_recipe(self, collection_name, recipe_name):
         """
@@ -83,18 +99,23 @@ class NoSQLDatabaseClient(BaseClient):
 
         for ingredient in ingredient_names:
             existing_ingredient = collection.find_one(
-                { "name": ingredient_names}
+                { "name": ingredient}
                 )
+                #may need to check if its already in nonexist list. don't add dups
             if existing_ingredient == None:
                 non_existent_ingredients.append(ingredient)
         
         
         if len(non_existent_ingredients) != 0:
             create_new_ingredients = True
-            print("Some ingredients were not found. Please create ingredient objects to continue and try again. Ex. : Ingredient(" /" + ingredient /" + ", matter=, food_group=)")
+            print("Some ingredients were not found. Please create ingredient objects to continue and try again. Ex. : Ingredient(\" " + ingredient + " \", matter=, food_group=)")
 
 
         return create_new_ingredients , non_existent_ingredients
+
+    
+
+
     # def get_measurement_type(self, collection_name):
     #     """
     #     Used to query db for ingredient measurement type (whole)
