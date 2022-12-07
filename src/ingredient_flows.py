@@ -102,15 +102,46 @@ def request_direction_data(csv_filepath):
     Output: dict
     """
 
-    print("Importing direction data and buildling dictionary...")
+    print("Importing direction data and building dictionary...")
     direction_dict= {}
     data = pd.read_csv(csv_filepath)
     df = pd.DataFrame(data)
 
     for row in range(len(df)):
-        step = df.step.iloc[row]
+        step = str(df.step.iloc[row])
         direction = df.directions.iloc[row]
         direction_dict.update({step:direction})
 
     print("Sucessfully created Directions dictionary")
     return direction_dict
+
+def get_instance(dict):
+    """
+    Function to instantiate a class object from a dict (specifically, from a db query).
+    Should be used after getting an ingredient from a db.
+    Input: Dict
+    Output: Ingredient object
+    """
+    name = dict["name"]
+    matter = dict["mass_type"]
+    food_group = dict["food_group"]
+    
+    ingredient = Ingredient(name, matter, food_group)
+    
+    return ingredient
+
+def get_instances(list):
+    """
+    Function to instantiate class objects from a list of dicts. (specifically, from a db query)
+    Should be used after getting ingredients from a db.
+    Input: list [dict, dict, dict]
+    Output: Ingredient object
+    """
+
+    ingredients = []
+    
+    for dict in list:
+        ingredient = get_instance(dict)
+        ingredients.append(ingredient)
+    
+    return ingredients

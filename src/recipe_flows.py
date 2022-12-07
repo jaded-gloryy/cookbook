@@ -1,8 +1,23 @@
 from classes.Recipe import Recipe
 
+def get_instance(dict):
+    """
+    Function to instantiate a class object from a dict (specifically, from a db query)
+    Should be used after getting a recipe from a db.
+    Input: Dict
+    Output: Recipe object
+    """
+    name = dict["name"]
+    measured_ingredients = dict["measured_ingredients"]
+    directions = dict["directions"]
+    
+    recipe = Recipe(name, measured_ingredients, directions)
+    
+    return recipe
+
 def create_recipe(recipe_name, ingredient_objects, measurement_objects, directions):
     """
-    Create a recipe to upload to a db. Ask user for inputs: recipe name, ingredients and measurements,
+    Create a recipe to upload to a db. Ask user for inputs: recipe name, ingredients and measurements, directions.
     recipe_name: string
     ingredients: list of Ingredient objects
     measurements: list of Measurement objects
