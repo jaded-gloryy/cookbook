@@ -1,5 +1,5 @@
-from ingredient_flows import standardize_ingredient_name
-from ingredient_flows import create_ingredients
+from flows.ingredient_flows import standardize_ingredient_name
+from flows.ingredient_flows import create_ingredients
 class BaseClient:
     """
     A base class that can be used to setup receiving and driving with a 3rd party client
