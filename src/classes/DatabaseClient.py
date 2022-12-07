@@ -41,7 +41,7 @@ class NoSQLDatabaseClient(BaseClient):
         for name in ingredient_names:
             ingredient_name = name
         
-            ingredient = collection.find(
+            ingredient = collection.find_one(
             { "name": ingredient_name}
             )
             ingredients.append(ingredient)
@@ -69,6 +69,7 @@ class NoSQLDatabaseClient(BaseClient):
         """
         collection = self._get_collection(collection_name)
         collection.insert_one(recipe)
+        print("Recipe successfully uploaded")
 
     def get_recipe(self, collection_name, recipe_name):
         """
@@ -76,9 +77,10 @@ class NoSQLDatabaseClient(BaseClient):
         TODO: Add query terms and logic for recipes with the same name. Should I return them all?
         """
         collection = self._get_collection(collection_name)
-        recipe = collection.find(
+        recipe = collection.find_one(
             { "name": recipe_name}
             )
+        
         return recipe
 
     def query_ingredient(self, collection_name, ingredient_names):
