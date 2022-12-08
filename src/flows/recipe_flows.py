@@ -1,4 +1,5 @@
 from classes.Recipe import Recipe
+from shared_flows import standardize_name
 
 def get_instance(dict):
     """
@@ -25,12 +26,15 @@ def create_recipe(recipe_name, ingredient_objects, measurement_objects, directio
 
     Output: Dict containing a recipe
     """
+
+    standardized_recipe_name =  standardize_name(recipe_name)
+
     ingredient_names = []
     for ingredient in ingredient_objects:
         ingredient_names.append(ingredient.name)
 
     measured_ingredients = {ingredient:measurement for ingredient,measurement in zip(ingredient_names,measurement_objects)}
-    recipe_object = Recipe(recipe_name, measured_ingredients ,directions).__dict__    
+    recipe_object = Recipe(standardized_recipe_name, measured_ingredients ,directions).__dict__    
 
     return recipe_object
 
