@@ -1,6 +1,6 @@
 import pandas as pd
 from classes.Ingredient import Ingredient
-from shared_flows import standardize_name
+from utils import standardize_name
 
 def create_ingredients(ingredient_data, non_existent_ingredients):
     """

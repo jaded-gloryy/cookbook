@@ -1,5 +1,5 @@
 from classes.Recipe import Recipe
-from shared_flows import standardize_name
+from utils import standardize_name
 
 def get_instance(dict):
     """
