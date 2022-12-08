@@ -1,5 +1,3 @@
-from flows.ingredient_flows import standardize_ingredient_name
-from flows.ingredient_flows import create_ingredients
 class BaseClient:
     """
     A base class that can be used to setup receiving and driving with a 3rd party client
@@ -78,9 +76,10 @@ class NoSQLDatabaseClient(BaseClient):
         """
         collection = self._get_collection(collection_name)
         recipe = collection.find_one(
-            { "name": recipe_name}
+            { "name": recipe_name }
             )
-        
+        if recipe == None:
+            print("Recipe does not exist and needs to be created. Please use import_recipe.py")
         return recipe
 
     def query_ingredient(self, collection_name, ingredient_names):
