@@ -1,15 +1,6 @@
 import pandas as pd
 from classes.Ingredient import Ingredient
-
-def standardize_ingredient_name(ingredient_name):
-    if type(ingredient_name) != str:
-        standardized_ingredient_name = ingredient_name 
-    else:   
-        ingredient = ingredient_name.lower()
-        standardized_ingredient_name = ingredient.replace(" ","_")
-    
-
-    return standardized_ingredient_name
+from shared_flows import standardize_name
 
 def create_ingredients(ingredient_data, non_existent_ingredients):
     """
@@ -67,7 +58,7 @@ def request_ingredient_data(csv_filepath):
     #     standardized_ingredient_names.append(clean)
 
     for dirty in headings:
-        clean = standardize_ingredient_name(dirty)
+        clean = standardize_name(dirty)
         standardized_headings.append(clean) 
 
     #ingredient data (should be a tuple: ingredient name, matter, food group)
@@ -79,12 +70,12 @@ def request_ingredient_data(csv_filepath):
     
     for row in range(len(df_clean)):
         # name = standardized_ingredient_names[row]
-        name = standardize_ingredient_name(df_clean.name.iloc[row])
+        name = standardize_name(df_clean.name.iloc[row])
         standardized_ingredient_names.append(name)
-        matter = standardize_ingredient_name(df_clean.matter.iloc[row])
-        foodgroup = standardize_ingredient_name(df_clean.food_group.iloc[row])
+        matter = standardize_name(df_clean.matter.iloc[row])
+        foodgroup = standardize_name(df_clean.food_group.iloc[row])
         quantity = df_clean.quantity.iloc[row]
-        units = standardize_ingredient_name(df_clean.units.iloc[row])
+        units = standardize_name(df_clean.units.iloc[row])
 
         ingredient_data.append([name,matter,foodgroup])
         measurement_data.append([quantity, units])

@@ -16,3 +16,12 @@ def connect_to_db(database_name):
     print("Database Client created")
     
     return db_client
+
+def standardize_name(name):
+    if type(name) != str:
+        standardized_name = name 
+    else:   
+        lowercase_name = name.lower()
+        standardized_name = lowercase_name.replace(" ","_")
+    
+    return standardized_name
