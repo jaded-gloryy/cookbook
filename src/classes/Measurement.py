@@ -22,7 +22,7 @@ class Measurement:
         Inputs: quantity: int, unit: str
         Output: A measurement object
         """
-        measurement_object = Measurement(quantity, unit).__dict__
+        measurement_object = Measurement(str(quantity), unit).__dict__
         return measurement_object
 
     def createMany_measurements(measurement_data):
