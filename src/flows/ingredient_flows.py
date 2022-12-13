@@ -114,7 +114,7 @@ def get_instance(dict):
     Output: Ingredient object
     """
     name = dict["name"]
-    matter = dict["mass_type"]
+    matter = dict["matter"]
     food_group = dict["food_group"]
     
     ingredient = Ingredient(name, matter, food_group)
@@ -126,7 +126,7 @@ def get_instances(list):
     Function to instantiate class objects from a list of dicts. (specifically, from a db query)
     Should be used after getting ingredients from a db.
     Input: list [dict, dict, dict]
-    Output: Ingredient object
+    Output: list; [Ingredient objects]
     """
 
     ingredients = []
