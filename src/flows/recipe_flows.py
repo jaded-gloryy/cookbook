@@ -1,18 +1,23 @@
 from classes.Recipe import Recipe
 from utils import standardize_name
 
-def get_instance(dict):
+
+def get_instance(dictionary):
     """
     Function to instantiate a class object from a dict (specifically, from a db query)
     Should be used after getting a recipe from a db.
     Input: Dict
     Output: Recipe object
     """
-    name = dict["name"]
-    measured_ingredients = dict["measured_ingredients"]
-    directions = dict["directions"]
+    if type(dictionary) is not dict:
+        print("Recipe cannot be instantiated.")
+        recipe = None
+    else:
+        name = dictionary["name"]
+        measured_ingredients = dictionary["measured_ingredients"]
+        directions = dictionary["directions"]
     
-    recipe = Recipe(name, measured_ingredients, directions)
+        recipe = Recipe(name, measured_ingredients, directions)
     
     return recipe
 
@@ -25,6 +30,7 @@ def create_recipe(recipe_name, ingredient_objects, measurement_objects, directio
     directions: dict {int; step: str; instruction} 
 
     Output: Dict containing a recipe
+    TODO: create measured ingredients using create_measured_ingredient function?
     """
 
     standardized_recipe_name =  standardize_name(recipe_name)
@@ -45,6 +51,15 @@ def create_recipe(recipe_name, ingredient_objects, measurement_objects, directio
 
 #     """
 #     return
+# def create_measured_ingredient(ingredient_name, measurement_object):
+#     """Used to create an ingredient - measurement pairing.
+    
+#     Input:  ingredient_name: "str"
+#             measurement_object: {dict} 
+#     Output: dict; {ingredient_name: measurement_object}
+#     """
+#     measured_ingredient = {ingredient_name:measurement_object}
+#     return measured_ingredient
 
 
 def calculate_servings():
