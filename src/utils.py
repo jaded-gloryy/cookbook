@@ -12,7 +12,7 @@ def connect_to_db(database_name):
     print("Successfully connected to Database")
 
     print("Creating Database Client...")
-    db_client = NoSQLDatabaseClient(mongo_client, database_name )
+    db_client = NoSQLDatabaseClient(mongo_client, database_name)
     print("Database Client created")
     
     return db_client
@@ -25,3 +25,13 @@ def standardize_name(name):
         standardized_name = lowercase_name.replace(" ","_")
     
     return standardized_name
+
+def clean_dictionary (dictionary):
+    """
+    Function to standardize the values in a dict.
+
+    Inputs: {dict}
+    """
+    for key, value in dictionary.items():
+        # value = standardize_name(value)
+        dictionary[key] = standardize_name(value)
