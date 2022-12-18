@@ -1,4 +1,5 @@
 from classes.Recipe import Recipe
+from flows.ingredient_flows import createOne_measurement
 from utils import standardize_name
 
 
@@ -43,6 +44,48 @@ def create_recipe(recipe_name, ingredient_objects, measurement_objects, directio
     recipe_object = Recipe(standardized_recipe_name, measured_ingredients ,directions).__dict__    
 
     return recipe_object
+
+
+def create_measured_ingredients(ingredient_names,measurement_objects):
+    """
+    Function to create ingredient-measurement pairs
+    """
+     
+    measured_ingredients = {ingredient:measurement for ingredient,measurement in zip(ingredient_names,measurement_objects)}
+    return measured_ingredients
+
+def createOne_recipe(recipe_dicts):
+    """
+    Create one recipe object from a list of recipe dictionaries.
+
+    Inputs: [list]
+    recipe_dicts: [list]; A list of dictionaries: keys = "ingredient_name", "measurement", "quantity", "recipe_name", "step", "directions"
+
+    Output: List of Recipe objects
+    """
+    measured_ingredients = []
+    direction_list = {}
+
+# use dict.get in case the key doesn't exist
+    for item in recipe_dicts:
+        recipe_name = item.get("recipe_name")
+        ingredient_name = item.get("ingredient_name")
+        unit = item.get("units")
+        quantity = item.get("quantity")
+        step = item.get("step")
+        directions = item.get("directions")
+    
+        if quantity:
+            measurement = createOne_measurement(quantity, unit)
+            measured_ingredient = {ingredient_name:measurement}
+            measured_ingredients.append(measured_ingredient)
+        
+        if directions:
+            direction_list.update({step:directions})
+
+        recipe = Recipe(recipe_name, measured_ingredients, direction_list)
+    
+    return recipe
 
 
 # def get_recipe():
