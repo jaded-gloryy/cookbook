@@ -16,15 +16,6 @@ class Measurement:
     #     ingredient_name = 
 
 
-    def create_measurement(quantity, unit):
-        """
-        A function to combine a quantity with unit
-        Inputs: quantity: int, unit: str
-        Output: A measurement object
-        """
-        measurement_object = Measurement(str(quantity), unit).__dict__
-        return measurement_object
-
     def createMany_measurements(measurement_data):
         """
         Helper function to generate a list of measurement objects for recipe creation.
