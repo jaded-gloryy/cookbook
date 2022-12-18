@@ -1,7 +1,55 @@
 import pandas as pd
 from classes.Ingredient import Ingredient
+from classes.Measurement import Measurement
 from utils import standardize_name
 
+def createOne_ingredient(ingredient_dict): 
+    """
+    Function to create one ingredient object from a dictionary.
+
+    Inputs:
+    ingredient_dict: {dict}; keys = ingredient_name, matter, food_group
+
+    Output: One ingredient object
+    """
+
+    name = ingredient_dict["ingredient_name"]
+    matter = ingredient_dict["matter"]
+    food_group = ingredient_dict ["food_group"]
+    ingredient = Ingredient(name, matter, food_group)
+    
+    return ingredient
+
+def createMany_ingredients(ingredient_dicts):
+    """
+    Function to create ingredient objects from a list of ingredients.
+
+    Inputs:
+    ingredient_dicts: [list]; A list of dictionaries: keys = ingredient_name, matter, food_group
+
+    Output: List of ingredient objects
+    """
+    many_ingredients = []
+    
+    for item in ingredient_dicts:
+        if item and len(item.values()) == 3:
+            name = item["ingredient_name"]
+            matter = item["matter"]
+            food_group = item ["food_group"]
+            ingredient = Ingredient(name, matter, food_group)
+            many_ingredients.append(ingredient)
+    
+    return many_ingredients
+
+def createOne_measurement(quantity, unit):
+    """
+    A function to combine a quantity with unit
+    Inputs: quantity: int, unit: str
+    Output: A measurement object
+    """
+    measurement_object = Measurement(str(quantity), unit).__dict__
+    return measurement_object
+    
 def create_ingredients(ingredient_data, non_existent_ingredients):
     """
     Function to create ingredient objects from a list of ingredients.
