@@ -35,3 +35,33 @@ def clean_dictionary (dictionary):
     for key, value in dictionary.items():
         # value = standardize_name(value)
         dictionary[key] = standardize_name(value)
+
+def parse_dictionary(new_keys, dictionary):
+    """
+    Function to create a dictionary from an existing dictionary.
+
+    Inputs: [list]; new_keys - a list of keys
+            {dict}; row - a row dict from DictReader
+    Output: {dict} 
+    """
+    parsed_dictionary = {}
+    for key in dictionary:
+        if key in new_keys:
+            value = dictionary[key]
+            if value:
+                parsed_dictionary.update({key:value}) 
+            
+    if parsed_dictionary:
+        return parsed_dictionary
+
+def package_objects(object_data, object_names):
+    """
+    Function to package up objects.
+    Returns n lists. n= len(object_names)
+
+    Input: [list]; object_data: list of bundled data
+    Output: n [lists]; 
+    """
+    for row in object_data:
+        for i in range(len(row)):
+            object_data[i]
