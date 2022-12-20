@@ -13,7 +13,7 @@ test_data = os.path.join(recipe_filepath, recipe_csv)
 recipes = []
 ingredients = []
 
-test_view_recipe_names = ["pizza", "mocha", "cereal"]
+view_recipe_names = ["pizza", "mocha", "cereal"]
 
 
 fake_measurement_updates = [(1000, "cups"), (1000, "tsp")]
@@ -88,9 +88,29 @@ def parse_recipe_data (recipe_data):
         
     return object_data
 
-def test_view(recipe_names, recipe_storage):
+def get_recipe (recipe_name, recipe_storage):
     """
-    Function to test viewing a recipe.
+    Function to get a recipe.
+
+    Inputs: 
+        "str" ; recipe_name: the name of a recipe to get
+        [recipe objects]; recipe_storage: a list containing all created recipes
+    Output:
+        recipe object: A recipe object
+    """
+    
+
+    for recipe_object in recipe_storage:
+        found_recipe = True if recipe_object.name == recipe_name else False
+        if found_recipe:
+            return recipe_object
+    if not found_recipe:
+        print(f"Recipe: {recipe_name} not found")
+
+
+def view_recipe(recipe_names, recipe_storage):
+    """
+    Function to view a recipe.
 
     Inputs: 
         [list] ; recipe_name: a list of recipes to view
@@ -101,17 +121,12 @@ def test_view(recipe_names, recipe_storage):
     for recipe_request in recipe_names:
         print(f"Viewing {recipe_request} recipe")
 
-        for recipe_obj in recipe_storage: 
-            item_found = False   
+        view_this_recipe = get_recipe(standardize_name(recipe_request), recipe_storage)
+        if not view_this_recipe:
+            print(f"Recipe: {recipe_request} doesn't exist")
+        else:
             new_line = '\n'
-            if recipe_obj.name == standardize_name(recipe_request):
-                item_found = True
-                print(f". {new_line}. {new_line} Recipe name: {recipe_obj.name} {new_line} Ingredients: {new_line} {recipe_obj.measured_ingredients} {new_line} Directions: {new_line} {recipe_obj.directions} {new_line}.{new_line}.")   
-                break
-            # else:
-            #     continue
-        if not item_found:
-            print(f"{recipe_request} doesn't exist")
+            print(f". {new_line}. {new_line} Recipe name: {view_this_recipe.name} {new_line} Ingredients: {new_line} {view_this_recipe.measured_ingredients} {new_line} Directions: {new_line} {view_this_recipe.directions} {new_line}.{new_line}.")   
                     
 
 def update_recipe(recipe_name, update_dict, recipe_storage):
@@ -161,7 +176,24 @@ def update_recipe(recipe_name, update_dict, recipe_storage):
         print(f"Recipe: {recipe_name} doesn't exist")
 
                 
-                
+def delete_one_recipe(recipe_name, recipe_storage):      
+    """
+    Function to delete a recipe. 
+
+    Inputs: 
+        "str"; recipe_name
+        [recipe objects]; recipe_storage: a list containing all created recipes
+    """
+
+    for recipe_object_index in range(len(recipe_storage)):
+        recipe_object = recipe_storage[recipe_object_index]
+        found_recipe = True if recipe_object.name == recipe_name else False
+        if found_recipe:
+            recipe_storage.pop(recipe_object_index)
+            print(f" Recipe: {recipe_name} has been deleted.")
+            break
+    if not found_recipe:
+        print(f"{recipe_name} was not deleted because it doesn't exist.")
 
 
     
@@ -202,7 +234,7 @@ if __name__ == "__main__":
     start_view_test = input("Start view test? y or n ")
     if start_view_test == "y":
         print("Starting recipe view test...")
-        test_view(test_view_recipe_names, recipes)
+        view_recipe(view_recipe_names, recipes)
         print("Recipe view test completed.")
     
     start_update_test = input("Start update recipe test? y or n ")
@@ -219,9 +251,14 @@ if __name__ == "__main__":
         update_recipe(recipe_to_update2, recipe_update_config2, recipes)
         print("Update recipe test completed.")
 
-    test_view([update_recipe_name], recipes)
-
-
-    # Step 3: Update a recipe
+    view_recipe([update_recipe_name], recipes)
 
     #Step 4: Delete a recipe
+    
+    
+    print("Starting deletion test...")
+    print("Deleting the following recipe...")
+    recipe_to_delete = view_recipe([update_recipe_name], recipes)
+
+    delete_one_recipe(update_recipe_name, recipes)
+    deleted_recipe = view_recipe([update_recipe_name], recipes)
