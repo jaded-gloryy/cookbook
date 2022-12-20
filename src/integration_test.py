@@ -2,18 +2,33 @@
 import csv
 import os
 from config import CONFIG
-from flows.ingredient_flows import createOne_ingredient, createMany_ingredients
-from flows.recipe_flows import createOne_recipe
-from utils import clean_dictionary, parse_dictionary
+from flows.ingredient_flows import createOne_ingredient, createMany_ingredients, createOne_measurement, createMany_measurements
+from flows.recipe_flows import createOne_recipe, create_measured_ingredients 
+from utils import clean_dictionary, parse_dictionary, standardize_name
 
 recipe_csv = "test_recipe_data.csv"
 recipe_filepath = CONFIG["TEST_DOCS_FILEPATH"]
+test_data = os.path.join(recipe_filepath, recipe_csv)
 
 recipes = []
 ingredients = []
 
-dirty_recipe_names = []
-test_data = os.path.join(recipe_filepath, recipe_csv)
+test_view_recipe_names = ["pizza", "mocha", "cereal"]
+
+
+fake_measurement_updates = [(1000, "cups"), (1000, "tsp")]
+fake_ingredient_list = ["flour", "salt"]
+fake_measurement_objects = createMany_measurements(fake_measurement_updates)
+
+recipe_to_update = "pizza"
+recipe_to_update2 = "new_fake_recipe_name"
+update_measured_ingredients = create_measured_ingredients(fake_ingredient_list, fake_measurement_objects)
+update_directions = {"1": "new", "2":"directions", "3":"added"}
+update_recipe_name = "new_fake_recipe_name"
+
+recipe_update_config = {"recipe_name":update_recipe_name, "measured_ingredients":update_measured_ingredients, "directions":update_directions}
+# recipe_update_config = {"recipe_name":update_recipe_name, "measured_ingredients":{}, "directions":{}}
+recipe_update_config2 = {"recipe_name":"", "measured_ingredients":{}, "directions":{}}
 
 
 def import_recipe_data(csv_file):
@@ -50,10 +65,11 @@ def parse_recipe_data (recipe_data):
     """
     Parses recipe data. Returns a list of data for object creation.
 
-    Input: [list]; recipe_data: a list of dicts
-    Output: {dict}; object_data: a dict of object data
+    Input: 
+        [dict]; recipe_data: a list of dicts
+    Output: 
+        [dict]; object_data: a list of object data dicts
     """
-
     object_data = []
     ingredient_keys = ["ingredient_name", "matter", "food_group"]
     recipe_keys = ["ingredient_name", "units", "quantity", "recipe_name", "step", "directions"]
@@ -72,39 +88,91 @@ def parse_recipe_data (recipe_data):
         
     return object_data
 
+def test_view(recipe_names, recipe_storage):
+    """
+    Function to test viewing a recipe.
 
-    # # Gather a list of all recipe names in the files
-    #         dirty_recipe_name = row["recipe_name"]
-    #         if dirty_recipe_name not in dirty_recipe_names:
-    #             dirty_recipe_names.append(dirty_recipe_name)
+    Inputs: 
+        [list] ; recipe_name: a list of recipes to view
+        [list]; recipe_storage: a list containing all created recipes
+    Output:
+        recipe object: A recipe object view
+    """
+    for recipe_request in recipe_names:
+        print(f"Viewing {recipe_request} recipe")
 
-    #         ## Make ingredient objects
-    #         # read ingredient names
-    #         ingredient_name = standardize_name(row["ingredient_name"])
-    #         # check if they exist in ingredient list
-    #         # if ingredient_name not in ingredients:
+        for recipe_obj in recipe_storage: 
+            item_found = False   
+            new_line = '\n'
+            if recipe_obj.name == standardize_name(recipe_request):
+                item_found = True
+                print(f". {new_line}. {new_line} Recipe name: {recipe_obj.name} {new_line} Ingredients: {new_line} {recipe_obj.measured_ingredients} {new_line} Directions: {new_line} {recipe_obj.directions} {new_line}.{new_line}.")   
+                break
+            # else:
+            #     continue
+        if not item_found:
+            print(f"{recipe_request} doesn't exist")
+                    
+
+def update_recipe(recipe_name, update_dict, recipe_storage):
+    """
+    Function to update an existing recipe.
+
+    Inputs: 
+        "str"; recipe_name: the name of the recipe to update
+        {dict}; update_dict: contains the desired changes
+        [list]; recipe_storage: a list containing all created recipes
+
+    """
+    
+    #get recipe to update
+
+    for recipe in recipe_storage:
+        recipe_found = True if recipe.name == recipe_name else False
+        update_dict_exists = True if update_dict else False
+
+        if update_dict_exists and recipe_found:
+            # update_this_recipe = recipe
+
+            #make the changes
+            if update_dict["recipe_name"]:
+                new_name = update_dict["recipe_name"]
+                recipe.name = standardize_name(new_name)
+                print(f"Updated {recipe_name} recipe name to {new_name}")
+
+            if update_dict["measured_ingredients"]:
+                new_measured_ingredients = update_dict["measured_ingredients"]
+                recipe.measured_ingredients = new_measured_ingredients
+                updated_this = []
+
+                for ingredient in new_measured_ingredients:
+                    updated_this.append(ingredient)   
+                print(f"Updated these ingredient measurements for {recipe_name}: {updated_this}")
+
+            if update_dict["directions"]:
+                new_directions = update_dict["directions"]
+                recipe.directions = new_directions
+                print(f"Updated {recipe_name} directions")
+            break
+        elif not update_dict_exists:
+            print(f"No changes were provided for {recipe_name}")
+            break
+    if update_dict_exists and not recipe_found:
+        print(f"Recipe: {recipe_name} doesn't exist")
 
                 
-    #         # parse row dict
-    #         ingredient_keys = ["ingredient_name", "matter", "food_group"]
-    #         one_ingredient_dict = parse_dictionary(ingredient_keys, row)
-    #         #create ingredients and update ingredient object list
-    #         one_ingredient = createOne_ingredient(one_ingredient_dict)
-    #         ingredients.update(one_ingredient)
+                
 
-    #         ## Make recipe objects
-    #         # read 
 
+    
 
 if __name__ == "__main__":
     # Step 1: Import a recipe
+    print("Starting recipe import test...")
     # a. Read in recipe data
     all_recipe_data = import_recipe_data(test_data)
-
     #clean and parse data
     all_object_data = parse_recipe_data(all_recipe_data)
-    # I want all_object_data to looli like this:
-        #{ingredient_data:[data], recipe_data:[data]}
 
     # b. Create ingredient and recipe objects
     for objects in all_object_data:
@@ -112,10 +180,11 @@ if __name__ == "__main__":
         create_these_ingredients = objects["ingredient_data"]
 
         many_ingredients = createMany_ingredients(create_these_ingredients)
+
         for ingredient_obj in many_ingredients:
             ing_name = ingredient_obj.name
             if ing_name in ingredients:
-                print(f"{ing_name} has already exists.")
+                print(f"{ing_name} already exists.")
             else:
                 ingredients.append(ingredient_obj)
                 print(f"Ingredient: {ing_name} has been created and saved.")
@@ -127,12 +196,31 @@ if __name__ == "__main__":
         else:
             recipes.append(recipe)
             print(f"Recipe: {rec_name} has been created and saved.")
-    
 
-    # c. Create recipe objects
-        # many_recipes = 
-
+    print("Completed recipe import test.")
     # Step 2: View a recipe
+    start_view_test = input("Start view test? y or n ")
+    if start_view_test == "y":
+        print("Starting recipe view test...")
+        test_view(test_view_recipe_names, recipes)
+        print("Recipe view test completed.")
+    
+    start_update_test = input("Start update recipe test? y or n ")
+    if start_update_test == "y":
+        print("Starting update recipe test...")
+        update_recipe(recipe_to_update,recipe_update_config,recipes)
+        print("Update recipe test completed.")
+
+        print("Starting update recipe test...")
+        update_recipe("mocha",None,recipes)
+        print("Update recipe test completed.")
+        
+        print("Starting update recipe test...")
+        update_recipe(recipe_to_update2, recipe_update_config2, recipes)
+        print("Update recipe test completed.")
+
+    test_view([update_recipe_name], recipes)
+
 
     # Step 3: Update a recipe
 
