@@ -62,13 +62,15 @@ def createOne_recipe(recipe_dicts):
     recipe_dicts: [list]; A list of dictionaries: keys = "ingredient_name", "measurement", "quantity", "recipe_name", "step", "directions"
 
     Output: List of Recipe objects
+    TODO: provide a storage location and check if object exists there already, only create if it doesn't exist.
+    TODO: add logic for removing duplicates in this function
     """
     measured_ingredients = []
     direction_list = {}
 
 # use dict.get in case the key doesn't exist
     for item in recipe_dicts:
-        recipe_name = item.get("recipe_name")
+        recipe_name = standardize_name(item.get("recipe_name"))
         ingredient_name = item.get("ingredient_name")
         unit = item.get("units")
         quantity = item.get("quantity")
@@ -83,7 +85,7 @@ def createOne_recipe(recipe_dicts):
         if directions:
             direction_list.update({step:directions})
 
-        recipe = Recipe(recipe_name, measured_ingredients, direction_list)
+    recipe = Recipe(recipe_name, measured_ingredients, direction_list)
     
     return recipe
 
