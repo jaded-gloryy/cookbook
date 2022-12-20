@@ -28,6 +28,8 @@ def createMany_ingredients(ingredient_dicts):
     ingredient_dicts: [list]; A list of dictionaries: keys = ingredient_name, matter, food_group
 
     Output: List of ingredient objects
+    TODO: provide a storage location and check if object exists there already, only create if it doesn't exist.
+    TODO: add logic for removing duplicates in this function
     """
     many_ingredients = []
     
@@ -49,6 +51,22 @@ def createOne_measurement(quantity, unit):
     """
     measurement_object = Measurement(str(quantity), unit).__dict__
     return measurement_object
+
+def createMany_measurements(measurement_data):
+        """
+        Helper function to generate a list of measurement objects for recipe creation.
+        Input: list of quantity, unit pairs;
+            quantity: int, unit: "str"
+        Output: A list of measurement objects
+            
+        """
+        measurement_objects = []
+        for measurement in measurement_data:
+            new_measurement_obj = Measurement(str(measurement[0]), measurement[1])
+
+            measurement_objects.append(new_measurement_obj)
+        
+        return measurement_objects
     
 def create_ingredients(ingredient_data, non_existent_ingredients):
     """
