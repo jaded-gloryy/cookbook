@@ -1,6 +1,4 @@
-# What defines a recipe?
-# list of measured ingredients
-# list of instructions
+from utils import standardize_name
 
 class Recipe:
     """
@@ -26,6 +24,69 @@ class Recipe:
     def add_servings (self, servings, serving_size=None):
         self.servings = servings
         self.serving_size = serving_size
+    def delete_one_recipe(self, recipe_storage):      
+        """
+        Function to delete a recipe. 
+
+        Inputs: 
+            [recipe objects]; recipe_storage: a list containing all created recipes
+        """
+
+        for recipe_object_index in range(len(recipe_storage)):
+            recipe_object = recipe_storage[recipe_object_index]
+            found_recipe = True if recipe_object.name == self.name else False
+            if found_recipe:
+                recipe_storage.pop(recipe_object_index)
+                print(f" Recipe: {self.name} has been deleted.")
+                break
+        if not found_recipe:
+            print(f"{self.name} was not deleted because it doesn't exist.")
+
+    def view(self):
+        """
+        Function to view a recipe.
+
+        Inputs: 
+            [list]; recipe_storage: a list containing all created recipes
+        Output:
+            recipe object: A recipe object view
+        """
+        print(f"Viewing {self.name} recipe")
+        new_line = '\n'
+        print(f". {new_line}. {new_line} Recipe name: {self.name} {new_line} Ingredients: {new_line} {self.measured_ingredients} {new_line} Directions: {new_line} {self.directions} {new_line}.{new_line}.")
+
+    def update(self, update_dict):
+        """
+        Function to update an existing recipe.
+
+        Inputs: 
+            {dict}; update_dict: contains the desired changes
+            [list]; recipe_storage: a list containing all created recipes
+
+        """
+                #make the changes
+        update_dict_exists = True if update_dict else False
+        if update_dict["recipe_name"]:
+            new_name = update_dict["recipe_name"]
+            self.name = standardize_name(new_name)
+            print(f"Updated recipe name to {new_name}")
+
+        if update_dict["measured_ingredients"]:
+            new_measured_ingredients = update_dict["measured_ingredients"]
+            self.measured_ingredients = new_measured_ingredients
+            updated_this = []
+
+            for ingredient in new_measured_ingredients:
+                updated_this.append(ingredient)   
+            print(f"Updated these ingredient measurements for {self.name}: {updated_this}")
+
+        if update_dict["directions"]:
+            new_directions = update_dict["directions"]
+            self.directions = new_directions
+            print(f"Updated {self.name} directions")
+
+        elif not update_dict_exists:
+            print(f"No changes were provided for {self.name}")
 
 class Component(Recipe):
     """
