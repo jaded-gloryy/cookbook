@@ -68,7 +68,8 @@ if __name__ == "__main__":
         print("Starting recipe view test...")
         for name in view_recipe_names:
             recipe = get_recipe(name, recipes)
-            recipe.view()
+            if recipe:
+                recipe.view()
         print("Recipe view test completed.")
     
     start_update_test = input("Start update recipe test? y or n ")
@@ -80,7 +81,8 @@ if __name__ == "__main__":
 
         print("Starting update recipe test...")
         update_this_recipe = get_recipe("mocha", recipes)
-        update_this_recipe.update(None)
+        if update_this_recipe:
+            update_this_recipe.update(None)
         print("Update recipe test completed.")
         
         print("Starting update recipe test...")
@@ -88,7 +90,7 @@ if __name__ == "__main__":
         update_this_recipe.update(recipe_update_config2)
         print("Update recipe test completed.")
 
-    get_recipe(update_recipe_name. recipes).view()
+    get_recipe(update_recipe_name, recipes).view()
 
     #Step 4: Delete a recipe
     
@@ -97,5 +99,5 @@ if __name__ == "__main__":
     print("Deleting the following recipe...")
     recipe_to_delete = get_recipe(update_recipe_name, recipes).view()
     delete_this_recipe = get_recipe(update_recipe_name, recipes)
-    delete_this_recipe.delete_one_recipe()
-    deleted_recipe = get_recipe(update_recipe_name, recipes).view()
+    delete_this_recipe.delete_one_recipe(recipes)
+    deleted_recipe = get_recipe(update_recipe_name, recipes)
