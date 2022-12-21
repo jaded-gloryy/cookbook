@@ -29,23 +29,6 @@ class Ingredient:
         self.assign_units(units)
 
 
-    # def assign_food_group(self, food_group):
-
-    # def assign_type():
-    # def assign_attribute()
-
-    # def import_ingredient_measurements(ingredient, quanitity, unit):
-        """
-        Use if you have a list of ingredients and measurements (a quanitity - unit pair).
-        """
-        # measurements = []
-        # ingredients = []
-        # for i in range(len(quanitity)+1):
-        #    measurement = Measurement(quanitity,unit)
-        #    measurements.append(measurement)
-
-        # for i in range(len(ingredient)+1):
-        #     if ingredient
 
 
             

@@ -4,13 +4,3 @@ class Measurement:
     def __init__(self, quantity, unit):
         self.quantity = quantity
         self.unit = unit
-        # #matter= liquid or solid
-        # self.matter = matter 
-        # #measurement type = cups, teaspoons, grams, etc
-        # self.measurement_type = measurement_type
-
-    # def get_measurement_type(self, ingredient_name):
-    #     """
-    #     A function to query the ingredient for the type of measurement (volume or mass)
-    #     """
-    #     ingredient_name = 
