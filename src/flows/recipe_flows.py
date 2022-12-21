@@ -64,7 +64,7 @@ def get_recipe (recipe_name, recipe_storage):
             return recipe_object
     if not found_recipe:
         print(f"Recipe: {recipe_name} not found")
-        
+    
 def calculate_servings():
     """
     Build a serving size scaler. This wwill be used to scale the recipe to the number of serving you want to make
